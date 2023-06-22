@@ -7,6 +7,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import br.com.senac.actions.Actions;
 import br.com.senac.entities.Depositos;
+import br.com.senac.entities.Produtos;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -30,26 +31,50 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/depositos/{id}")
+    public Depositos getDeposito(@PathParam("id") String id) {
+        Actions action = new Actions();
+        Depositos deposito = new Depositos();
+
+        deposito = action.getDeposito(id, url, username, password);
+
+        return deposito;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos/{id}")
+    public Produtos getProduto(@PathParam("id") String id) {
+        Actions action = new Actions();
+        Produtos produto = new Produtos();
+
+        produto = action.getProduto(id, url, username, password);
+
+        return produto;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/depositos")
     public List<Depositos> getDepositos() {
         Actions action = new Actions();
         List<Depositos> depositos = new ArrayList<>();
 
-        depositos = action.buscaLista(url, username, password);
+        depositos = action.getDepositos(url, username, password);
 
         return depositos;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/depositos/{id}")
-    public Depositos getDeposito(@PathParam("id") String id) {
+    @Path("/produtos")
+    public List<Produtos> getProdutos() {
         Actions action = new Actions();
-        Depositos deposito = new Depositos();
+        List<Produtos> produtos = new ArrayList<>();
 
-        deposito = action.busca(id, url, username, password);
+        produtos = action.getProdutos(url, username, password);
 
-        return deposito;
+        return produtos;
     }
 
     @POST
@@ -61,6 +86,19 @@ public class Resources {
         Depositos ret = new Depositos();
 
         ret = action.postDeposito(deposito, url, username, password);
+
+        return ret;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos")
+    public Produtos postProduto(Produtos produto) {
+        Actions action = new Actions();
+        Produtos ret = new Produtos();
+
+        ret = action.postProduto(produto, url, username, password);
 
         return ret;
     }
@@ -78,6 +116,19 @@ public class Resources {
         return ret;
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("produtos/{id}")
+    public Produtos putProduto(@PathParam("id") String id, Produtos produto) {
+        Actions action = new Actions();
+        Produtos ret = new Produtos();
+
+        ret = action.putProduto(id, produto, url, username, password);
+
+        return ret;
+    }
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("depositos/{id}")
@@ -88,5 +139,17 @@ public class Resources {
         deposito = action.deleteDeposito(id, url, username, password);
 
         return deposito;
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("produtos/{id}")
+    public Produtos deleteProduto(@PathParam("id") String id) {
+        Actions action = new Actions();
+        Produtos produto = new Produtos();
+
+        produto = action.deleteProduto(id, url, username, password);
+
+        return produto;
     }
 }
