@@ -7,6 +7,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import br.com.senac.actions.Actions;
 import br.com.senac.entities.Depositos;
+import br.com.senac.entities.Fornecedores;
 import br.com.senac.entities.Produtos;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -43,6 +44,18 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/fornecedores/{id}")
+    public Fornecedores getFornecedor(@PathParam("id") String id) {
+        Actions action = new Actions();
+        Fornecedores fornecedor = new Fornecedores();
+
+        fornecedor = action.getFornecedor(id, url, username, password);
+
+        return fornecedor;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/produtos/{id}")
     public Produtos getProduto(@PathParam("id") String id) {
         Actions action = new Actions();
@@ -67,6 +80,18 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/fornecedores")
+    public List<Fornecedores> getFornecedores() {
+        Actions action = new Actions();
+        List<Fornecedores> fornecedores = new ArrayList<>();
+
+        fornecedores = action.getFornecedores(url, username, password);
+
+        return fornecedores;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/produtos")
     public List<Produtos> getProdutos() {
         Actions action = new Actions();
@@ -86,6 +111,19 @@ public class Resources {
         Depositos ret = new Depositos();
 
         ret = action.postDeposito(deposito, url, username, password);
+
+        return ret;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/fornecedores")
+    public Fornecedores postFornecedor(Fornecedores fornecedor) {
+        Actions action = new Actions();
+        Fornecedores ret = new Fornecedores();
+
+        ret = action.postFornecedor(fornecedor, url, username, password);
 
         return ret;
     }
@@ -119,6 +157,19 @@ public class Resources {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("fornecedores/{id}")
+    public Fornecedores putFornecedor(@PathParam("id") String id, Fornecedores fornecedor) {
+        Actions action = new Actions();
+        Fornecedores ret = new Fornecedores();
+
+        ret = action.putFornecedor(id, fornecedor, url, username, password);
+
+        return ret;
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("produtos/{id}")
     public Produtos putProduto(@PathParam("id") String id, Produtos produto) {
         Actions action = new Actions();
@@ -139,6 +190,18 @@ public class Resources {
         deposito = action.deleteDeposito(id, url, username, password);
 
         return deposito;
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("fornecedores/{id}")
+    public Fornecedores deleteFornecedor(@PathParam("id") String id) {
+        Actions action = new Actions();
+        Fornecedores fornecedor = new Fornecedores();
+
+        fornecedor = action.deleteFornecedor(id, url, username, password);
+
+        return fornecedor;
     }
 
     @DELETE

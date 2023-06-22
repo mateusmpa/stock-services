@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import br.com.senac.entities.Depositos;
+import br.com.senac.entities.Fornecedores;
 import br.com.senac.entities.Produtos;
 
 public class Actions {
@@ -73,6 +74,66 @@ public class Actions {
         }
 
         return deposito;
+    }
+
+    public Fornecedores getFornecedor(String codigo, String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        Fornecedores fornecedor = new Fornecedores();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select id, nom_nome, nom_codigo from es_fornecedores where nom_codigo = '" + codigo + "'");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                fornecedor.setId(rs.getString(1));
+                fornecedor.setNome(rs.getString(2));
+                fornecedor.setCodigo(rs.getString(3));
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return fornecedor;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            fornecedor.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            fornecedor.setMensagem("Erro");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+
+        return fornecedor;
     }
 
     public Produtos getProduto(String codigo, String url, String user, String password) {
@@ -206,6 +267,74 @@ public class Actions {
         return depositos;
     }
 
+    public List<Fornecedores> getFornecedores(String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<Fornecedores> fornecedores = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement("select id, nom_nome, nom_codigo from es_fornecedores");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Fornecedores fornecedor = new Fornecedores();
+
+                fornecedor.setId(rs.getString(1));
+                fornecedor.setNome(rs.getString(2));
+                fornecedor.setCodigo(rs.getString(3));
+
+                fornecedores.add(fornecedor);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return fornecedores;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Fornecedores fornecedor = new Fornecedores();
+            fornecedor.setMensagem("Erro");
+            fornecedores.add(fornecedor);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Fornecedores fornecedor = new Fornecedores();
+            fornecedor.setMensagem("Erro");
+            fornecedores.add(fornecedor);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return fornecedores;
+    }
+
     public List<Produtos> getProdutos(String url, String user, String password) {
         Connection conn = null;
         ResultSet rs = null;
@@ -293,6 +422,48 @@ public class Actions {
             conn.close();
 
             ret.setMensagem("Deposito cadastrado!");
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public Fornecedores postFornecedor(Fornecedores fornecedor, String url, String username, String password) {
+        Connection conn = null;
+        CallableStatement ps = null;
+
+        Fornecedores ret = new Fornecedores();
+
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            ps = conn.prepareCall("insert into es_fornecedores (nom_nome, nom_codigo) " +
+                    "values ('" + fornecedor.getNome() + "', '" + fornecedor.getCodigo() + "')");
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+            ret.setMensagem("Fornecedor cadastrado!");
         } catch (SQLException e) {
             Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
             ret.setMensagem("Erro");
@@ -414,6 +585,59 @@ public class Actions {
         return ret;
     }
 
+    public Fornecedores putFornecedor(String id, Fornecedores fornecedor, String url, String username,
+            String password) {
+        Connection conn = null;
+        CallableStatement ps = null;
+
+        Fornecedores ret = new Fornecedores();
+        List<String> partial_command = new ArrayList<>();
+
+        if (fornecedor.getNome() != null) {
+            partial_command.add("nom_nome = '" + fornecedor.getNome() + "'");
+        }
+
+        if (fornecedor.getCodigo() != null) {
+            partial_command.add("nom_codigo = '" + fornecedor.getCodigo() + "'");
+        }
+
+        String command = "update es_fornecedores set " +
+                String.join(", ", partial_command) + " where id = " + id;
+
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            ps = conn.prepareCall(command);
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+            ret.setMensagem("Fornecedor alterado!");
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return ret;
+    }
+
     public Produtos putProduto(String id, Produtos produto, String url, String username, String password) {
         Connection conn = null;
         CallableStatement ps = null;
@@ -509,6 +733,47 @@ public class Actions {
             }
         }
         return deposito;
+    }
+
+    public Fornecedores deleteFornecedor(String id, String url, String username, String password) {
+        Connection conn = null;
+        CallableStatement ps = null;
+
+        Fornecedores fornecedor = new Fornecedores();
+
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            ps = conn.prepareCall("delete es_fornecedores " +
+                    "where id = " + id);
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+            fornecedor.setMensagem("Fornecedor apagado!");
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            fornecedor.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            fornecedor.setMensagem("Erro");
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return fornecedor;
     }
 
     public Produtos deleteProduto(String id, String url, String username, String password) {
