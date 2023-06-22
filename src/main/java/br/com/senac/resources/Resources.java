@@ -9,6 +9,7 @@ import br.com.senac.actions.Actions;
 import br.com.senac.entities.Depositos;
 import br.com.senac.entities.Fornecedores;
 import br.com.senac.entities.Produtos;
+import br.com.senac.entities.ProdutosFornecedores;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -80,6 +81,42 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos_fornecedores")
+    public List<ProdutosFornecedores> getProdutosFornecedores() {
+        Actions action = new Actions();
+        List<ProdutosFornecedores> produtosFornecedores = new ArrayList<>();
+
+        produtosFornecedores = action.getProdutosFornecedores(url, username, password);
+
+        return produtosFornecedores;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/fornecedores/{id}/produtos")
+    public List<ProdutosFornecedores> getProdutosDoFornecedor(@PathParam("id") String id) {
+        Actions action = new Actions();
+        List<ProdutosFornecedores> produtosFornecedores = new ArrayList<>();
+
+        produtosFornecedores = action.getProdutosDoFornecedor(id, url, username, password);
+
+        return produtosFornecedores;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos/{id}/fornecedores")
+    public List<ProdutosFornecedores> getFornecedoresDoProduto(@PathParam("id") String id) {
+        Actions action = new Actions();
+        List<ProdutosFornecedores> produtosFornecedores = new ArrayList<>();
+
+        produtosFornecedores = action.getFornecedoresDoProduto(id, url, username, password);
+
+        return produtosFornecedores;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/fornecedores")
     public List<Fornecedores> getFornecedores() {
         Actions action = new Actions();
@@ -111,6 +148,19 @@ public class Resources {
         Depositos ret = new Depositos();
 
         ret = action.postDeposito(deposito, url, username, password);
+
+        return ret;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos_fornecedores")
+    public ProdutosFornecedores postProdutoFornecedor(ProdutosFornecedores produtoFornecedor) {
+        Actions action = new Actions();
+        ProdutosFornecedores ret = new ProdutosFornecedores();
+
+        ret = action.postProdutoFornecedor(produtoFornecedor, url, username, password);
 
         return ret;
     }
