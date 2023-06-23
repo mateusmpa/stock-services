@@ -60,7 +60,7 @@ create table es_movimentacoes(
     id_deposito_produto number not null,
     num_quantidade number not null,
     dec_valor_unitario decimal(10,2),
-    dat_registro date,
+    dat_registro timestamp,
     primary key (id),
     constraint movi_movitipo_fk foreign key (id_movimentacao_tipo) references es_movimentacao_tipos(id),
     constraint movi_depoprod_fk foreign key (id_deposito_produto) references es_depositos_produtos(id)
