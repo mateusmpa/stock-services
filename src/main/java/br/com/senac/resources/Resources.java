@@ -35,36 +35,36 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/depositos/{id}")
-    public Depositos getDeposito(@PathParam("id") String id) {
+    @Path("/depositos/{codigoDeposito}")
+    public Depositos getDeposito(@PathParam("codigoDeposito") String codigoDeposito) {
         Actions action = new Actions();
         Depositos deposito = new Depositos();
 
-        deposito = action.getDeposito(id, url, username, password);
+        deposito = action.getDeposito(codigoDeposito, url, username, password);
 
         return deposito;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/fornecedores/{id}")
-    public Fornecedores getFornecedor(@PathParam("id") String id) {
+    @Path("/fornecedores/{codigoFornecedor}")
+    public Fornecedores getFornecedor(@PathParam("codigoFornecedor") String codigoFornecedor) {
         Actions action = new Actions();
         Fornecedores fornecedor = new Fornecedores();
 
-        fornecedor = action.getFornecedor(id, url, username, password);
+        fornecedor = action.getFornecedor(codigoFornecedor, url, username, password);
 
         return fornecedor;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/produtos/{id}")
-    public Produtos getProduto(@PathParam("id") String id) {
+    @Path("/produtos/{codigoProduto}")
+    public Produtos getProduto(@PathParam("codigoProduto") String codigoProduto) {
         Actions action = new Actions();
         Produtos produto = new Produtos();
 
-        produto = action.getProduto(id, url, username, password);
+        produto = action.getProduto(codigoProduto, url, username, password);
 
         return produto;
     }
@@ -119,12 +119,12 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/fornecedores/{id}/produtos")
-    public List<ProdutosFornecedores> getProdutosDoFornecedor(@PathParam("id") String id) {
+    @Path("/fornecedores/{codigoFornecedor}/produtos")
+    public List<ProdutosFornecedores> getProdutosDoFornecedor(@PathParam("codigoFornecedor") String codigoFornecedor) {
         Actions action = new Actions();
         List<ProdutosFornecedores> produtosFornecedores = new ArrayList<>();
 
-        produtosFornecedores = action.getProdutosDoFornecedor(id, url, username, password);
+        produtosFornecedores = action.getProdutosDoFornecedor(codigoFornecedor, url, username, password);
 
         return produtosFornecedores;
     }
@@ -168,12 +168,12 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/produtos/{id}/fornecedores")
-    public List<ProdutosFornecedores> getFornecedoresDoProduto(@PathParam("id") String id) {
+    @Path("/produtos/{codigoProduto}/fornecedores")
+    public List<ProdutosFornecedores> getFornecedoresDoProduto(@PathParam("codigoProduto") String codigoProduto) {
         Actions action = new Actions();
         List<ProdutosFornecedores> produtosFornecedores = new ArrayList<>();
 
-        produtosFornecedores = action.getFornecedoresDoProduto(id, url, username, password);
+        produtosFornecedores = action.getFornecedoresDoProduto(codigoProduto, url, username, password);
 
         return produtosFornecedores;
     }
