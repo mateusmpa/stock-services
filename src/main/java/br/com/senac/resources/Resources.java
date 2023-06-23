@@ -7,7 +7,9 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import br.com.senac.actions.Actions;
 import br.com.senac.entities.Depositos;
+import br.com.senac.entities.DepositosProdutos;
 import br.com.senac.entities.Fornecedores;
+import br.com.senac.entities.Movimentacoes;
 import br.com.senac.entities.Produtos;
 import br.com.senac.entities.ProdutosFornecedores;
 import jakarta.ws.rs.Consumes;
@@ -81,6 +83,30 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/depositos_produtos")
+    public List<DepositosProdutos> getDepositosProdutos() {
+        Actions action = new Actions();
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        depositosProdutos = action.getDepositosProdutos(url, username, password);
+
+        return depositosProdutos;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/movimentacoes")
+    public List<Movimentacoes> getMovimentacoes() {
+        Actions action = new Actions();
+        List<Movimentacoes> movimentacoes = new ArrayList<>();
+
+        movimentacoes = action.getMovimentacoes(url, username, password);
+
+        return movimentacoes;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/produtos_fornecedores")
     public List<ProdutosFornecedores> getProdutosFornecedores() {
         Actions action = new Actions();
@@ -101,6 +127,43 @@ public class Resources {
         produtosFornecedores = action.getProdutosDoFornecedor(id, url, username, password);
 
         return produtosFornecedores;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/depositos/{codigoDeposito}/produtos")
+    public List<DepositosProdutos> getProdutosDoDeposito(@PathParam("codigoDeposito") String codigoDeposito) {
+        Actions action = new Actions();
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        depositosProdutos = action.getProdutosDoDeposito(codigoDeposito, url, username, password);
+
+        return depositosProdutos;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/depositos/{codigoDeposito}/produtos/{codigoProduto}")
+    public DepositosProdutos getDepositoProduto(@PathParam("codigoDeposito") String codigoDeposito,
+            @PathParam("codigoProduto") String codigoProduto) {
+        Actions action = new Actions();
+        DepositosProdutos depositoProduto = new DepositosProdutos();
+
+        depositoProduto = action.getDepositoProduto(codigoDeposito, codigoProduto, url, username, password);
+
+        return depositoProduto;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos/{codigoProduto}/depositos")
+    public List<DepositosProdutos> getDepositosComProduto(@PathParam("codigoProduto") String codigoProduto) {
+        Actions action = new Actions();
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        depositosProdutos = action.getDepositosComProduto(codigoProduto, url, username, password);
+
+        return depositosProdutos;
     }
 
     @GET
@@ -200,6 +263,34 @@ public class Resources {
         Depositos ret = new Depositos();
 
         ret = action.putDeposito(id, deposito, url, username, password);
+
+        return ret;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("depositos/{codigoDeposito}/produtos/{codigoProduto}/movimentacoes")
+    public Movimentacoes postMovimentacao(@PathParam("codigoDeposito") String codigoDeposito,
+            @PathParam("codigoProduto") String codigoProduto, Movimentacoes movimentacao) {
+        Actions action = new Actions();
+        Movimentacoes ret = new Movimentacoes();
+
+        ret = action.postMovimentacao(codigoDeposito, codigoProduto, movimentacao, url, username, password);
+
+        return ret;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("depositos/{codigoDeposito}/movimentacoes")
+    public Movimentacoes postMovimentacao(@PathParam("codigoDeposito") String codigoDeposito,
+            Movimentacoes movimentacao) {
+        Actions action = new Actions();
+        Movimentacoes ret = new Movimentacoes();
+
+        ret = action.postMovimentacao(codigoDeposito, movimentacao, url, username, password);
 
         return ret;
     }

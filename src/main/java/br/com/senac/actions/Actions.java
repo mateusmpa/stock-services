@@ -12,7 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import br.com.senac.entities.Depositos;
+import br.com.senac.entities.DepositosProdutos;
 import br.com.senac.entities.Fornecedores;
+import br.com.senac.entities.Movimentacoes;
 import br.com.senac.entities.Produtos;
 import br.com.senac.entities.ProdutosFornecedores;
 
@@ -266,6 +268,379 @@ public class Actions {
             }
         }
         return depositos;
+    }
+
+    public List<DepositosProdutos> getDepositosProdutos(String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select nom_codigo_desposito, nom_desposito, nom_codigo_produto, nom_produto, num_quantidade, num_quantidade_minima "
+                            +
+                            "from vw_listar_depositos_produtos");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DepositosProdutos depositoProduto = new DepositosProdutos();
+
+                depositoProduto.setCodigoDeposito(rs.getString(1));
+                depositoProduto.setDeposito(rs.getString(2));
+                depositoProduto.setCodigoProduto(rs.getString(3));
+                depositoProduto.setProduto(rs.getString(4));
+                depositoProduto.setQuantidade(rs.getString(5));
+                depositoProduto.setQuantidadeMinima(rs.getString(6));
+
+                depositosProdutos.add(depositoProduto);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return depositosProdutos;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return depositosProdutos;
+    }
+
+    public List<DepositosProdutos> getProdutosDoDeposito(String codigoDeposito, String url, String user,
+            String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select nom_codigo_desposito, nom_desposito, nom_codigo_produto, nom_produto, num_quantidade, num_quantidade_minima "
+                            +
+                            "from vw_listar_depositos_produtos " +
+                            "where nom_codigo_desposito = '" + codigoDeposito + "'");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DepositosProdutos depositoProduto = new DepositosProdutos();
+
+                depositoProduto.setCodigoDeposito(rs.getString(1));
+                depositoProduto.setDeposito(rs.getString(2));
+                depositoProduto.setCodigoProduto(rs.getString(3));
+                depositoProduto.setProduto(rs.getString(4));
+                depositoProduto.setQuantidade(rs.getString(5));
+                depositoProduto.setQuantidadeMinima(rs.getString(6));
+
+                depositosProdutos.add(depositoProduto);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return depositosProdutos;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return depositosProdutos;
+    }
+
+    public DepositosProdutos getDepositoProduto(String codigoDeposito, String codigoProduto, String url, String user,
+            String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        DepositosProdutos depositoProduto = new DepositosProdutos();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select nom_codigo_desposito, nom_desposito, nom_codigo_produto, nom_produto, num_quantidade, num_quantidade_minima "
+                            +
+                            "from vw_listar_depositos_produtos " +
+                            "where nom_codigo_desposito = '" + codigoDeposito + "' and nom_codigo_produto = '"
+                            + codigoProduto + "'");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                depositoProduto.setCodigoDeposito(rs.getString(1));
+                depositoProduto.setDeposito(rs.getString(2));
+                depositoProduto.setCodigoProduto(rs.getString(3));
+                depositoProduto.setProduto(rs.getString(4));
+                depositoProduto.setQuantidade(rs.getString(5));
+                depositoProduto.setQuantidadeMinima(rs.getString(6));
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return depositoProduto;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            depositoProduto.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            depositoProduto.setMensagem("Erro");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return depositoProduto;
+    }
+
+    public List<DepositosProdutos> getDepositosComProduto(String codigoProduto, String url, String user,
+            String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select nom_codigo_desposito, nom_desposito, nom_codigo_produto, nom_produto, num_quantidade, num_quantidade_minima "
+                            +
+                            "from vw_listar_depositos_produtos " +
+                            "where nom_codigo_produto = '" + codigoProduto + "'");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DepositosProdutos depositoProduto = new DepositosProdutos();
+
+                depositoProduto.setCodigoDeposito(rs.getString(1));
+                depositoProduto.setDeposito(rs.getString(2));
+                depositoProduto.setCodigoProduto(rs.getString(3));
+                depositoProduto.setProduto(rs.getString(4));
+                depositoProduto.setQuantidade(rs.getString(5));
+                depositoProduto.setQuantidadeMinima(rs.getString(6));
+
+                depositosProdutos.add(depositoProduto);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return depositosProdutos;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return depositosProdutos;
+    }
+
+    public List<Movimentacoes> getMovimentacoes(String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<Movimentacoes> movimentacoes = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select num_codigo, nom_movimentacao, nom_codigo_deposito, nom_deposito, nom_codigo_produto, nom_produto, num_quantidade, dec_valor_unitario, dec_valor_total, dat_registro "
+                            +
+                            "from vw_listar_movimentacoes");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Movimentacoes movimentacao = new Movimentacoes();
+
+                movimentacao.setCodigo(rs.getString(1));
+                movimentacao.setMovimentacao(rs.getString(2));
+                movimentacao.setCodigoDeposito(rs.getString(3));
+                movimentacao.setDeposito(rs.getString(4));
+                movimentacao.setCodigoProduto(rs.getString(5));
+                movimentacao.setProduto(rs.getString(6));
+                movimentacao.setQuantidade(rs.getString(7));
+                movimentacao.setValorUnitario(rs.getFloat(8));
+                movimentacao.setValorTotal(rs.getString(9));
+                movimentacao.setRegistro(rs.getString(10));
+
+                movimentacoes.add(movimentacao);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return movimentacoes;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Movimentacoes movimentacao = new Movimentacoes();
+            movimentacao.setMensagem("Erro");
+            movimentacoes.add(movimentacao);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Movimentacoes movimentacao = new Movimentacoes();
+            movimentacao.setMensagem("Erro");
+            movimentacoes.add(movimentacao);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return movimentacoes;
     }
 
     public List<ProdutosFornecedores> getProdutosFornecedores(String url, String user, String password) {
@@ -683,6 +1058,114 @@ public class Actions {
             conn.close();
 
             ret.setMensagem("Produto e fornecedor cadastrado!");
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public Movimentacoes postMovimentacao(String codigoDeposito, String codigoProduto, Movimentacoes movimentacao,
+            String url,
+            String username, String password) {
+        Connection conn = null;
+        CallableStatement ps = null;
+
+        Movimentacoes ret = new Movimentacoes();
+
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            ps = conn.prepareCall("{call prc_atualizar_quantidade_produto_deposito(?, ?, ?, ?, ?)}");
+            ps.setString(1, codigoDeposito);
+            ps.setString(2, codigoProduto);
+            ps.setString(3, movimentacao.getQuantidade());
+            ps.setString(4, movimentacao.getCodigo());
+
+            if (movimentacao.getValorUnitario() == null) {
+                movimentacao.setValorUnitario(0f);
+            }
+
+            ps.setFloat(5, movimentacao.getValorUnitario());
+
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+            ret.setMensagem("Movimentação registrada!");
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+            ret.setMensagem("Erro");
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public Movimentacoes postMovimentacao(String codigoDeposito, Movimentacoes movimentacao, String url,
+            String username, String password) {
+        Connection conn = null;
+        CallableStatement ps = null;
+
+        Movimentacoes ret = new Movimentacoes();
+
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            ps = conn.prepareCall("{call prc_adicionar_produto_deposito(?, ?, ?, ?, ?, ?)}");
+            ps.setString(1, codigoDeposito);
+            ps.setString(2, movimentacao.getCodigoProduto());
+            ps.setString(3, movimentacao.getQuantidade());
+            ps.setString(4, movimentacao.getQuantidadeMinima());
+            ps.setString(5, movimentacao.getCodigo());
+
+            if (movimentacao.getValorUnitario() == null) {
+                movimentacao.setValorUnitario(0f);
+            }
+
+            ps.setFloat(6, movimentacao.getValorUnitario());
+
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+            ret.setMensagem("Movimentação registrada!");
         } catch (SQLException e) {
             Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
             ret.setMensagem("Erro");
