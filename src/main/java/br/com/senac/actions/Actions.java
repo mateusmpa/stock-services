@@ -150,8 +150,9 @@ public class Actions {
             conn = DriverManager.getConnection(url, user, password);
 
             ps = conn.prepareStatement(
-                    "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio from es_produtos where nom_codigo = '"
-                            + codigo + "'");
+                    "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio, num_quantidade " +
+                            "from vw_listar_produtos " +
+                            "where nom_codigo = '" + codigo + "'");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -160,6 +161,7 @@ public class Actions {
                 produto.setCodigo(rs.getString(3));
                 produto.setQuantidadeMinima(rs.getString(4));
                 produto.setValorMedio(rs.getString(5));
+                produto.setQuantidade(rs.getString(6));
             }
 
             rs.close();
@@ -938,7 +940,8 @@ public class Actions {
             conn = DriverManager.getConnection(url, user, password);
 
             ps = conn.prepareStatement(
-                    "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio from es_produtos");
+                    "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio, num_quantidade " +
+                            "from vw_listar_produtos");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -949,6 +952,7 @@ public class Actions {
                 produto.setCodigo(rs.getString(3));
                 produto.setQuantidadeMinima(rs.getString(4));
                 produto.setValorMedio(rs.getString(5));
+                produto.setQuantidade(rs.getString(6));
 
                 produtos.add(produto);
             }

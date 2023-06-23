@@ -7,6 +7,7 @@ public class Produtos implements Serializable {
     private String codigo;
     private String nome;
     private String quantidadeMinima;
+    private String quantidade;
     private String valorMedio;
     private String mensagem;
 
@@ -58,4 +59,11 @@ public class Produtos implements Serializable {
         this.mensagem = mensagem;
     }
 
+    public String getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(String quantidade) {
+        this.quantidade = quantidade;
+    }
 }
