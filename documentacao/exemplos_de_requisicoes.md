@@ -696,6 +696,45 @@ curl -X 'GET' \
 ]
 ```
 
+## Buscar as movimentaçoes de um produto
+
+* GET /estoque/produtos/{codigoProduto}/movimentacoes
+
+```sh
+curl -X 'GET' \
+  'http://localhost:9090/estoque/produtos/teni_0001/movimentacoes' \
+  -H 'accept: application/json'
+```
+
+```json
+[
+  {
+    "codigo": "1",
+    "codigoDeposito": "saop_0001",
+    "codigoProduto": "teni_0001",
+    "deposito": "São Paulo",
+    "movimentacao": "Entrada por Nota Fiscal",
+    "produto": "Tênis esportivo",
+    "quantidade": "433",
+    "registro": "2023-06-24 21:48:10",
+    "valorTotal": "385759.7",
+    "valorUnitario": 890.9
+  },
+  {
+    "codigo": "1",
+    "codigoDeposito": "salv_0001",
+    "codigoProduto": "teni_0001",
+    "deposito": "Salvador",
+    "movimentacao": "Entrada por Nota Fiscal",
+    "produto": "Tênis esportivo",
+    "quantidade": "200",
+    "registro": "2023-06-24 22:08:13",
+    "valorTotal": "179960",
+    "valorUnitario": 899.8
+  }
+]
+```
+
 ## Editar um produto
 
 * PUT /estoque/produtos/{id}

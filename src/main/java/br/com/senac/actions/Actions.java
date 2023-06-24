@@ -720,6 +720,86 @@ public class Actions {
         return movimentacoes;
     }
 
+    public List<Movimentacoes> getMovimentacoesDoProduto(String codigoProduto, String url, String user,
+            String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<Movimentacoes> movimentacoes = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select num_codigo, nom_movimentacao, nom_codigo_deposito, nom_deposito, nom_codigo_produto, nom_produto, num_quantidade, dec_valor_unitario, dec_valor_total, dat_registro "
+                            +
+                            "from vw_listar_movimentacoes " +
+                            "where nom_codigo_produto = '" + codigoProduto + "'");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Movimentacoes movimentacao = new Movimentacoes();
+
+                movimentacao.setCodigo(rs.getString(1));
+                movimentacao.setMovimentacao(rs.getString(2));
+                movimentacao.setCodigoDeposito(rs.getString(3));
+                movimentacao.setDeposito(rs.getString(4));
+                movimentacao.setCodigoProduto(rs.getString(5));
+                movimentacao.setProduto(rs.getString(6));
+                movimentacao.setQuantidade(rs.getString(7));
+                movimentacao.setValorUnitario(rs.getFloat(8));
+                movimentacao.setValorTotal(rs.getString(9));
+                movimentacao.setRegistro(rs.getString(10));
+
+                movimentacoes.add(movimentacao);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return movimentacoes;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Movimentacoes movimentacao = new Movimentacoes();
+            movimentacao.setMensagem("Erro");
+            movimentacoes.add(movimentacao);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Movimentacoes movimentacao = new Movimentacoes();
+            movimentacao.setMensagem("Erro");
+            movimentacoes.add(movimentacao);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return movimentacoes;
+    }
+
     public List<ProdutosFornecedores> getProdutosFornecedores(String url, String user, String password) {
         Connection conn = null;
         ResultSet rs = null;

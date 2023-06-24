@@ -119,6 +119,18 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos/{codigoProduto}/movimentacoes")
+    public List<Movimentacoes> getMovimentacoesDoProduto(@PathParam("codigoProduto") String codigoProduto) {
+        Actions action = new Actions();
+        List<Movimentacoes> movimentacoes = new ArrayList<>();
+
+        movimentacoes = action.getMovimentacoesDoProduto(codigoProduto, url, username, password);
+
+        return movimentacoes;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/produtos_fornecedores")
     public List<ProdutosFornecedores> getProdutosFornecedores() {
         Actions action = new Actions();
