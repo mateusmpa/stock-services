@@ -346,6 +346,81 @@ public class Actions {
         return depositosProdutos;
     }
 
+    public List<DepositosProdutos> getDepositosProdutosParaRepor(String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select nom_codigo_desposito, nom_desposito, nom_codigo_produto, nom_produto, num_quantidade, num_quantidade_minima "
+                            +
+                            "from vw_listar_depositos_produtos " +
+                            "where num_quantidade < num_quantidade_minima");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DepositosProdutos depositoProduto = new DepositosProdutos();
+
+                depositoProduto.setCodigoDeposito(rs.getString(1));
+                depositoProduto.setDeposito(rs.getString(2));
+                depositoProduto.setCodigoProduto(rs.getString(3));
+                depositoProduto.setProduto(rs.getString(4));
+                depositoProduto.setQuantidade(rs.getString(5));
+                depositoProduto.setQuantidadeMinima(rs.getString(6));
+
+                depositosProdutos.add(depositoProduto);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return depositosProdutos;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            DepositosProdutos depositoProduto = new DepositosProdutos();
+            depositoProduto.setMensagem("Erro");
+            depositosProdutos.add(depositoProduto);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return depositosProdutos;
+    }
+
     public List<DepositosProdutos> getProdutosDoDeposito(String codigoDeposito, String url, String user,
             String password) {
         Connection conn = null;
@@ -942,6 +1017,80 @@ public class Actions {
             ps = conn.prepareStatement(
                     "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio, num_quantidade " +
                             "from vw_listar_produtos");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Produtos produto = new Produtos();
+
+                produto.setId(rs.getString(1));
+                produto.setNome(rs.getString(2));
+                produto.setCodigo(rs.getString(3));
+                produto.setQuantidadeMinima(rs.getString(4));
+                produto.setValorMedio(rs.getString(5));
+                produto.setQuantidade(rs.getString(6));
+
+                produtos.add(produto);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+            return produtos;
+        } catch (SQLException e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Produtos produto = new Produtos();
+            produto.setMensagem("Erro");
+            produtos.add(produto);
+        } catch (Exception e) {
+            Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+
+            Produtos produto = new Produtos();
+            produto.setMensagem("Erro");
+            produtos.add(produto);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(Actions.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return produtos;
+    }
+
+    public List<Produtos> getProdutosParaRepor(String url, String user, String password) {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        List<Produtos> produtos = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+
+            ps = conn.prepareStatement(
+                    "select id, nom_nome, nom_codigo, num_quantidade_minima, dec_valor_medio, num_quantidade " +
+                            "from vw_listar_produtos " +
+                            "where num_quantidade < num_quantidade_minima");
             rs = ps.executeQuery();
 
             while (rs.next()) {

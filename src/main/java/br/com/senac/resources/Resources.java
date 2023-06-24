@@ -95,6 +95,18 @@ public class Resources {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/depositos_produtos/para_repor")
+    public List<DepositosProdutos> getDepositosProdutosParaRepor() {
+        Actions action = new Actions();
+        List<DepositosProdutos> depositosProdutos = new ArrayList<>();
+
+        depositosProdutos = action.getDepositosProdutosParaRepor(url, username, password);
+
+        return depositosProdutos;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/movimentacoes")
     public List<Movimentacoes> getMovimentacoes() {
         Actions action = new Actions();
@@ -198,6 +210,18 @@ public class Resources {
         List<Produtos> produtos = new ArrayList<>();
 
         produtos = action.getProdutos(url, username, password);
+
+        return produtos;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/produtos/para_repor")
+    public List<Produtos> getProdutosParaRepor() {
+        Actions action = new Actions();
+        List<Produtos> produtos = new ArrayList<>();
+
+        produtos = action.getProdutosParaRepor(url, username, password);
 
         return produtos;
     }

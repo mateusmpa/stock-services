@@ -250,6 +250,29 @@ curl -X 'GET' \
 ]
 ```
 
+## Buscar a relação de depósitos com produtos que estão com estoque baixo
+
+* GET /estoque/depositos_produtos/para_repor
+
+```sh
+curl -X 'GET' \
+  'http://localhost:9090/estoque/depositos_produtos/para_repor' \
+  -H 'accept: application/json'
+```
+
+```json
+[
+  {
+    "codigoDeposito": "salv_0001",
+    "codigoProduto": "teni_0001",
+    "deposito": "Salvador",
+    "produto": "Tênis esportivo",
+    "quantidade": "200",
+    "quantidadeMinima": "300"
+  }
+]
+```
+
 ## Buscar os fornecedores
 
 * GET /estoque/fornecedores
@@ -529,6 +552,37 @@ curl -X 'GET' \
     "quantidade": "1254",
     "quantidadeMinima": "500",
     "valorMedio": "934.18"
+  },
+  {
+    "codigo": "relo_0001",
+    "id": "3",
+    "nome": "Relógio de pulso",
+    "quantidade": "0",
+    "quantidadeMinima": "800",
+    "valorMedio": "0"
+  }
+]
+```
+
+## Buscar produtos com estoque baixo
+
+* GET /estoque/produtos/para_repor
+
+```sh
+curl -X 'GET' \
+  'http://localhost:9090/estoque/produtos/para_repor' \
+  -H 'accept: application/json'
+```
+
+```json
+[
+  {
+    "codigo": "smar_0001",
+    "id": "1",
+    "nome": "Smartphone",
+    "quantidade": "905",
+    "quantidadeMinima": "3000",
+    "valorMedio": "1111.14"
   },
   {
     "codigo": "relo_0001",
